@@ -32,9 +32,11 @@ def pokaz_przyklad():
 
 
 def mod_karty(log):
+    #tutaj zajdzie utworzenie 4 różnych zdjęć do 1 karty
     if log.at[0,'modyfikacja_kart'] == 0:
-        print("tak")
-
+        for images in tqdm(enumerate(os.listdir('karty/'))):
+            for i in range(4):
+                print("takk")   
         log.at[0,'modyfikacja_kart'] = 1
     else:
         print("niee")
@@ -45,7 +47,6 @@ log = pd.read_csv("info.csv")
 log = log.replace(np.nan,0).astype(np.int64) #zaczytujemy plik CSV w którym są puste wartości dla kolumn, po czym zastępujemy je 0
 mod_karty(log)
 pokaz_przyklad()
-#for images in tqdm(enumerate(os.listdir('karty/'))):
 #mod_karty(log)
 #print(log)
 log.to_csv("info.csv",index=False)
