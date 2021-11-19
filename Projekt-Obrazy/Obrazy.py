@@ -50,6 +50,13 @@ def mod_karty(log,generator):
 
         log.at[0,'modyfikacja_kart'] = 1 # zapisanie informacji o tym czy już zmodyfikowaliśmy karty.
 
+def nauczanie(log):
+    if log.at[0,'trening_sieci'] == 0:
+        print("tutaj jest trening sieci")
+    else:
+        print("zaczytanie pliku z uczeniem")
+    
+    #musimy zwrócic model który został uczony 
 
 log = pd.read_csv("info.csv")
 log = log.replace(np.nan,0).astype(np.int64) #zaczytujemy plik CSV w którym są puste wartości dla kolumn, po czym zastępujemy je 0
