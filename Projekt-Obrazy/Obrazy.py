@@ -65,5 +65,6 @@ data_gen = ImageDataGenerator(rotation_range=90,brightness_range=(0.5,1.5),shear
 
 pokaz_przyklad(data_gen)
 mod_karty(log,data_gen)
+print("zadziala")
 
 log.to_csv("info.csv",index=False)
