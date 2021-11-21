@@ -55,8 +55,6 @@ def modify_cards(log,gen):
     
     return data
 
-#def przygotuj_dane(dane):
-
 def nauczanie(log):
     if log.at[0,'trening_sieci'] == 0:
         print("tutaj jest trening sieci")
@@ -71,6 +69,15 @@ log = log.replace(np.nan,0).astype(np.int64) #zaczytujemy plik CSV w którym są
 data_gen = ImageDataGenerator(rotation_range=90,brightness_range=(0.5,1.5),shear_range=15.0,zoom_range=[0.3,.8])
 
 #pokaz_przyklad(data_gen)
+
+#gather data which will be used for training and testing our model.
 data = modify_cards(log,data_gen)
-print(len(data))
+training_data = data[:4800]
+training_X = np.array([x[0] for x in training_data])
+training_Y = np.array([x[1] for x in training_data])
+
+test_data = data[4800:]
+test_X = np.array([x[0] for x in test_data])
+test_Y = np.array([x[1] for x in test_data])
+
 log.to_csv("info.csv",index=False)
