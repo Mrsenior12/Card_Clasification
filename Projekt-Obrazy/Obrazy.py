@@ -14,15 +14,15 @@ from tqdm import tqdm
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def pokaz_przyklad(generator):
+def show_example(gen):
     img = plt.imread('karty/02_1.JPG')
     imgs = img.reshape((1,img.shape[0],img.shape[1],img.shape[2]))
 
     plt.imshow(imgs[0])
     plt.show()
 
-    generator.fit(imgs)
-    image_iter = generator.flow(imgs)
+    gen.fit(imgs)
+    image_iter = gen.flow(imgs)
     plt.figure(figsize=(4,4))
     for i in tqdm(range(4)):
         plt.subplot(1,4,i+1)
@@ -33,22 +33,27 @@ def pokaz_przyklad(generator):
     plt.show()
 
 
-def mod_karty(log,generator):
-    #tutaj zajdzie utworzenie 4 różnych zdjęć do 1 karty
-    if log.at[0,'modyfikacja_kart'] == 0:
-        for i, images in tqdm(enumerate(os.listdir('karty/'))):#Pętla zaczytująca zdjęcia z folderu karty
-
-            name,ext = images.split('.') #wydobycie nazwy zdjęcia
-            img = plt.imread('karty/{}'.format(images)) #zaczytanie zdjęcia 
-            imgs = img.reshape((1,img.shape[0],img.shape[1],img.shape[2]))
-            print(img.shape)
-
-            for j in range(1,5): #pętla w której przekształcamy jedno zdjęcie w 4 zmodyfikowane zdjęcia przy użyciu ImageDataGenerator
-                generator.fit(imgs)
-                image_iter = generator.flow(imgs)
-                skimage.io.imsave('kartyP/{}_{}.jpg'.format(name,j),image_iter.next()[0].astype('int'))  
-
-        log.at[0,'modyfikacja_kart'] = 1 # zapisanie informacji o tym czy już zmodyfikowaliśmy karty.
+def modify_cards(log,gen):
+    data = []
+    # loop over directory with cards and modify each 100 times as shown in function SHOW_EXAMPLE
+    # afther that save that data so we don't have to repeat that procces every single time
+    if log.at[0,'przygotowane'] == 0:
+        for i,images in tqdm(enumerate(os.listdir('karty/'))): 
+            img = cv2.imread('karty/{}'.format(images),cv2.IMREAD_GRAYSCALE)
+            img = cv2.resize(img,(180,180))
+            imgs = img.reshape((1,img.shape[0],img.shape[1],1))
+            gen.fit(imgs)
+            image_iter = gen.flow(imgs)
+            for j in range(100):
+                img_transformed = image_iter.next()[0].astype('int')/255
+                data.append([img_transformed,i])
+        shuffle(data)
+        np.save('data.npy',data)
+        log.at[0,'przygotowane'] = 1
+    else:
+        data = np.load('data.npy',allow_pickle=True)
+    
+    return data
 
 def nauczanie(log):
     if log.at[0,'trening_sieci'] == 0:
@@ -63,7 +68,16 @@ log = log.replace(np.nan,0).astype(np.int64) #zaczytujemy plik CSV w którym są
 
 data_gen = ImageDataGenerator(rotation_range=90,brightness_range=(0.5,1.5),shear_range=15.0,zoom_range=[0.3,.8])
 
-pokaz_przyklad(data_gen)
-mod_karty(log,data_gen)
+#pokaz_przyklad(data_gen)
+
+#gather data which will be used for training and testing our model.
+data = modify_cards(log,data_gen)
+training_data = data[:4800]
+training_X = np.array([x[0] for x in training_data])
+training_Y = np.array([x[1] for x in training_data])
+
+test_data = data[4800:]
+test_X = np.array([x[0] for x in test_data])
+test_Y = np.array([x[1] for x in test_data])
 
 log.to_csv("info.csv",index=False)
