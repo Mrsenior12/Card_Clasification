@@ -107,6 +107,35 @@ def model_plot():
     axa1[1].set(ylabel=None)
     plt.legend()
     plt.show()
+    
+def show_cards(test_X, model):
+    labs = ['2 of clubs', '2 of diamonds', '2 of spades', '2 of hearts',
+        '3 of clubs', '3 of diamonds', '3 of spades', '3 of hearts',
+        '4 of clubs', '4 of diamonds', '4 of spades', '4 of hearts',
+        '5 of clubs', '5 of diamonds', '5 of spades', '5 of hearts',
+        '6 of clubs', '6 of diamonds', '6 of spades', '6 of hearts',
+        '7 of clubs', '7 of diamonds', '7 of spades', '7 of hearts',
+        '8 of clubs', '8 of diamonds', '8 of spades', '8 of hearts',
+        '9 of clubs', '9 of diamonds', '9 of spades', '9 of hearts',
+        '10 of clubs', '10 of diamonds', '10 of spades', '10 of hearts',
+        'jack of clubs', 'jack of diamonds', 'jack of spades', 'jack of hearts',
+        'queen of clubs','queen of diamonds','queen of spades','queen of hearts',
+        'king of clubs','king of diamonds','king of spades','king of hearts',
+        'as of clubs','as of diamonds','as of spades','as of hearts']
+    predict_x=model.predict(test_X) 
+    predictions=np.argmax(predict_x,axis=1)
+
+    sample=test_X[:20]
+    plt.figure(figsize=(10,10))
+    for i in range(20):
+        plt.subplot(5,4,i+1)
+        plt.xticks([])
+        plt.yticks([])
+        plt.grid(False)
+        plt.imshow(sample[i].reshape(sample.shape[1], sample.shape[2]))
+        plt.xlabel(labs[predictions[i]])
+    plt.show()
+    
 log = pd.read_csv("info.csv")
 log = log.replace(np.nan,0).astype(np.int64) #zaczytujemy plik CSV w którym są puste wartości dla kolumn, po czym zastępujemy je 0
 
@@ -128,5 +157,4 @@ model = create_model(log,training_X,training_Y,test_X,test_Y)
 model.summary()
 model_plot()
 
-
-
+show_cards(test_X, model)
