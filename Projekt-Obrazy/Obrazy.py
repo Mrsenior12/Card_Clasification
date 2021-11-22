@@ -41,9 +41,9 @@ def modify_cards(log,gen):
     # afther that save that data so we don't have to repeat that procces every single time
     if log.at[0,'przygotowane'] == 0:
         for i,images in tqdm(enumerate(os.listdir('karty/'))): 
-            img = cv2.imread('karty/{}'.format(images),cv2.IMREAD_COLOR)
+            img = cv2.imread('karty/{}'.format(images),cv2.IMREAD_GRAYSCALE)
             img = cv2.resize(img,(180,180))
-            imgs = img.reshape((1,img.shape[0],img.shape[1],3))
+            imgs = img.reshape((1,img.shape[0],img.shape[1],1))
             gen.fit(imgs)
             image_iter = gen.flow(imgs)
             for j in range(100):
