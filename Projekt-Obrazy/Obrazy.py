@@ -41,12 +41,13 @@ def modify_cards(log,gen):
     # afther that save that data so we don't have to repeat that procces every single time
     if log.at[0,'przygotowane'] == 0:
         for i,images in tqdm(enumerate(os.listdir('karty/'))): 
-            img = cv2.imread('karty/{}'.format(images),cv2.IMREAD_GRAYSCALE)
+            imag = cv2.imread('karty/{}'.format(images),cv2.IMREAD_COLOR)
+            img = cv2.cvtColor(imag, cv2.COLOR_BGR2RGB)
             img = cv2.resize(img,(180,180))
-            imgs = img.reshape((1,img.shape[0],img.shape[1],1))
+            imgs = img.reshape((1,img.shape[0],img.shape[1],img.shape[2]))
             gen.fit(imgs)
             image_iter = gen.flow(imgs)
-            for j in range(100):
+            for j in range(50):
                 img_transformed = image_iter.next()[0].astype('int')/255
                 data.append([img_transformed,i])
         shuffle(data)
@@ -78,7 +79,7 @@ def create_model(log,train_X,train_Y,test_X,test_Y):
         # Training our new model.
         cp = tf.keras.callbacks.ModelCheckpoint(filepath='150epochs.h5',save_best_only=True,verbose=0)
         model.compile(loss = 'sparse_categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-        history_df = model.fit(train_X,train_Y,epochs=10,validation_data=(test_X,test_Y),callbacks=[cp])
+        history_df = model.fit(train_X,train_Y,epochs=25,validation_data=(test_X,test_Y),callbacks=[cp])
         
         pd.DataFrame.from_dict(history_df.history).to_csv('history.csv',index=False)
         model.save('model.h5')
@@ -90,7 +91,6 @@ def create_model(log,train_X,train_Y,test_X,test_Y):
     return model
 
 
-    
     #musimy zwrócic model który został uczony 
 
 def model_plot():
@@ -132,7 +132,7 @@ def show_cards(test_X, model):
         plt.xticks([])
         plt.yticks([])
         plt.grid(False)
-        plt.imshow(sample[i].reshape(sample.shape[1], sample.shape[2]))
+        plt.imshow(sample[i].reshape(sample.shape[1], sample.shape[2],sample.shape[3]))
         plt.xlabel(labs[predictions[i]])
     plt.show()
     
@@ -145,16 +145,14 @@ show_example(data_gen)
 
 #gather data which will be used for training and testing our model.
 data = modify_cards(log,data_gen)
-training_data = data[:4800]
+training_data = data[:2300]
 training_X = np.array([x[0] for x in training_data]) # lista flotów odpowiadająca zdjęcią kart
 training_Y = np.array([x[1] for x in training_data]) # lista intów odpowiadająca wartości karty zapisanej w cards.csv
 
-test_data = data[4800:]
+test_data = data[2300:]
 test_X = np.array([x[0] for x in test_data])
 test_Y = np.array([x[1] for x in test_data])
-print(len(data))
 model = create_model(log,training_X,training_Y,test_X,test_Y)
 model.summary()
 model_plot()
-
 show_cards(test_X, model)
