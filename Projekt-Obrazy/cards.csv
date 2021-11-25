@@ -1,53 +1,53 @@
-Card_name;colour;value
-2;Clubs;0
-2;Diamonds;1
-2;Spades;2
-2;Hearts;3
-3;Clubs;4
-3;Diamonds;5
-3;Spades;6
-3;Hearts;7
-4;Clubs;8
-4;Diamonds;9
-4;Spades;10
-4;Hearts;11
-5;Clubs;12
-5;Diamonds;13
-5;Spades;14
-5;Hearts;15
-6;Clubs;16
-6;Diamonds;17
-6;Spades;18
-6;Hearts;19
-7;Clubs;20
-7;Diamonds;21
-7;Spades;22
-7;Hearts;23
-8;Clubs;24
-8;Diamonds;25
-8;Spades;26
-8;Hearts;27
-9;Clubs;28
-9;Diamonds;29
-9;Spades;30
-9;Hearts;31
-10;Clubs;32
-10;Diamonds;33
-10;Spades;34
-10;Hearts;35
-Jack;Clubs;36
-Jack;Diamonds;37
-Jack;Spades;38
-Jack;Hearts;39
-Queen;Clubs;40
-Queen;Diamonds;41
-Queen;Spades;42
-Queen;Hearts;43
-King;Clubs;44
-King;Diamonds;45
-King;Spades;46
-King;Hearts;47
-Ace;Clubs;48
-Ace;Diamonds;49
-Ace;Spades;50
-Ace;Hearts;51
+Card_name;value
+2 of Clubs;0
+2 of Diamonds;1
+2 of Spades;2
+2 of Hearts;3
+3 of Clubs;4
+3 of Diamonds;5
+3 of Spades;6
+3 of Hearts;7
+4 of Clubs;8
+4 of Diamonds;9
+4 of Spades;10
+4 of Hearts;11
+5 of Clubs;12
+5 of Diamonds;13
+5 of Spades;14
+5 of Hearts;15
+6 of Clubs;16
+6 of Diamonds;17
+6 of Spades;18
+6 of Hearts;19
+7 of Clubs;20
+7 of Diamonds;21
+7 of Spades;22
+7 of Hearts;23
+8 of Clubs;24
+8 of Diamonds;25
+8 of Spades;26
+8 of Hearts;27
+9 of Clubs;28
+9 of Diamonds;29
+9 of Spades;30
+9 of Hearts;31
+10 of Clubs;32
+10 of Diamonds;33
+10 of Spades;34
+10 of Hearts;35
+Jack of Clubs;36
+Jack of Diamonds;37
+Jack of Spades;38
+Jack of Hearts;39
+Queen of Clubs;40
+Queen of Diamonds;41
+Queen of Spades;42
+Queen of Hearts;43
+King of Clubs;44
+King of Diamonds;45
+King of Spades;46
+King of Hearts;47
+Ace of Clubs;48
+Ace of Diamonds;49
+Ace of Spades;50
+Ace of Hearts;51
