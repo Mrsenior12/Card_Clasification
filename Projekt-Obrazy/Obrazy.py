@@ -47,6 +47,7 @@ def modify_cards(log,gen):
             imgs = img.reshape((1,img.shape[0],img.shape[1],img.shape[2]))
             gen.fit(imgs)
             image_iter = gen.flow(imgs)
+            
             for j in range(50):
                 img_transformed = image_iter.next()[0].astype('int')/255
                 data.append([img_transformed,i])
@@ -79,7 +80,7 @@ def create_model(log,train_X,train_Y,test_X,test_Y):
         # Training our new model.
         cp = tf.keras.callbacks.ModelCheckpoint(filepath='150epochs.h5',save_best_only=True,verbose=0)
         model.compile(loss = 'sparse_categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-        history_df = model.fit(train_X,train_Y,epochs=25,validation_data=(test_X,test_Y),callbacks=[cp])
+        history_df = model.fit(train_X,train_Y,epochs=150,validation_data=(test_X,test_Y),callbacks=[cp])
         
         pd.DataFrame.from_dict(history_df.history).to_csv('history.csv',index=False)
         model.save('model.h5')
@@ -116,7 +117,7 @@ def show_cards(test_X, model):
     sample=test_X[:20]
     plt.figure(figsize=(10,10))
     for i in range(20):
-        plt.subplot(5,4,i+1)
+        plt.subplot(5,4,i+1) 
         plt.xticks([])
         plt.yticks([])
         plt.grid(False)
